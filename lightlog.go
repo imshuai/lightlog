@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"strconv"
 	"sync"
 	"time"
@@ -99,7 +98,7 @@ func SetRollingFile(fileDir, fileName string, maxNumber int32, maxSize int64, _u
 	}
 	if !logObj.isMustRename() {
 		logObj.logfile, _ = os.OpenFile(fileDir+delimiter+fileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
-		logObj.lg = log.New(logObj.logfile, prefix, log.Ldate|log.Ltime|log.Lshortfile)
+		logObj.lg = log.New(logObj.logfile, prefix, log.Ldate|log.Ltime)
 	} else {
 		logObj.rename()
 	}
@@ -117,7 +116,7 @@ func SetRollingDaily(fileDir, fileName string) {
 
 	if !logObj.isMustRename() {
 		logObj.logfile, _ = os.OpenFile(fileDir+delimiter+fileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
-		logObj.lg = log.New(logObj.logfile, prefix, log.Ldate|log.Ltime|log.Lshortfile)
+		logObj.lg = log.New(logObj.logfile, prefix, log.Ldate|log.Ltime)
 	} else {
 		logObj.rename()
 	}
@@ -152,17 +151,8 @@ func color(t string) string {
 
 func console(t, s string) {
 	if consoleAppender {
-		_, file, line, _ := runtime.Caller(2)
-		short := file
-		for i := len(file) - 1; i > 0; i-- {
-			if file[i] == '/' {
-				short = file[i+1:]
-				break
-			}
-		}
-		file = short
 		c := color(t)
-		fmt.Fprintf(os.Stdout, "%s %s %s:%v: %s %s %s %s", prefix, time.Now().Format("2006/01/02 15:04:05"), file, line, c, t, reset, s)
+		fmt.Fprintf(os.Stdout, "%s %s: %s %s %s %s", prefix, time.Now().Format("2006/01/02 15:04:05"), c, t, reset, s)
 	}
 }
 
@@ -285,7 +275,7 @@ func (f *_FILE) rename() {
 			t, _ := time.Parse(DATEFORMAT, time.Now().Format(DATEFORMAT))
 			f._date = &t
 			f.logfile, _ = os.Create(f.dir + delimiter + f.filename)
-			f.lg = log.New(logObj.logfile, "\n", log.Ldate|log.Ltime|log.Lshortfile)
+			f.lg = log.New(logObj.logfile, "\n", log.Ldate|log.Ltime)
 		}
 	} else {
 		f.coverNextOne()
@@ -306,7 +296,7 @@ func (f *_FILE) coverNextOne() {
 	}
 	os.Rename(f.dir+delimiter+f.filename, f.dir+delimiter+f.filename+"."+strconv.Itoa(int(f._suffix)))
 	f.logfile, _ = os.Create(f.dir + delimiter + f.filename)
-	f.lg = log.New(logObj.logfile, "\n", log.Ldate|log.Ltime|log.Lshortfile)
+	f.lg = log.New(logObj.logfile, "\n", log.Ldate|log.Ltime)
 }
 
 func fileSize(file string) int64 {
