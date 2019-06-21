@@ -13,13 +13,13 @@ import (
 type LogLevel int
 
 const (
-	levelAll LogLevel = iota
-	levelDebug
-	levelInfo
-	levelWarning
-	levelError
-	levelFatal
-	levelNone
+	LevelAll LogLevel = iota
+	LevelDebug
+	LevelInfo
+	LevelWarning
+	LevelError
+	LevelFatal
+	LevelNone
 )
 
 const (
@@ -51,7 +51,7 @@ var (
 	defaultFileOut    io.Writer
 	defaultTimeFormat = "2006-01-02 15:04:05"
 	defaultPrefix     = "[lightlog]"
-	defaultLevel      = levelInfo
+	defaultLevel      = LevelInfo
 )
 
 //LogMsg 日志详细信息
@@ -73,11 +73,11 @@ type Logger struct {
 
 func color(t LogLevel) string {
 	switch t {
-	case levelDebug:
+	case LevelDebug:
 		return cyan
-	case levelInfo:
+	case LevelInfo:
 		return green
-	case levelWarning:
+	case LevelWarning:
 		return yellow
 	default:
 		return red
@@ -86,13 +86,13 @@ func color(t LogLevel) string {
 
 func level(t LogLevel) string {
 	switch t {
-	case levelDebug:
+	case LevelDebug:
 		return "DEBUG"
-	case levelInfo:
+	case LevelInfo:
 		return "INFO"
-	case levelWarning:
+	case LevelWarning:
 		return "WARN"
-	case levelError:
+	case LevelError:
 		return "ERROR"
 	default:
 		return "FATAL"
@@ -154,25 +154,25 @@ func (lg *Logger) Log(l LogLevel, e ...string) {
 
 //Debug 记录调试级日志
 func (lg *Logger) Debug(e ...string) {
-	lg.Log(levelDebug, e...)
+	lg.Log(LevelDebug, e...)
 }
 
 //Info 记录信息级日志
 func (lg *Logger) Info(e ...string) {
-	lg.Log(levelInfo, e...)
+	lg.Log(LevelInfo, e...)
 }
 
 //Warn 记录警告级日志
 func (lg *Logger) Warn(e ...string) {
-	lg.Log(levelWarning, e...)
+	lg.Log(LevelWarning, e...)
 }
 
 //Error 记录错误级日志
 func (lg *Logger) Error(e ...string) {
-	lg.Log(levelError, e...)
+	lg.Log(LevelError, e...)
 }
 
 //Fatal 记录崩溃错误级日志
 func (lg *Logger) Fatal(e ...string) {
-	lg.Log(levelFatal, e...)
+	lg.Log(LevelFatal, e...)
 }
