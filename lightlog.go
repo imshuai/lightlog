@@ -50,7 +50,7 @@ var (
 	defaultConsoleOut = os.Stdout
 	defaultFileOut    io.Writer
 	defaultTimeFormat = "2006-01-02 15:04:05"
-	defaultPrefix     = "[lightlog]"
+	defaultPrefix     = "lightlog"
 	defaultLevel      = LevelInfo
 )
 
@@ -106,10 +106,10 @@ func LogWriter(lg *Logger) {
 			c := color(p.Level)
 			l := level(p.Level)
 			if lg.ConsoleOut != nil {
-				fmt.Fprintf(lg.ConsoleOut, "[%s] %s: %s [%s] %s %s", lg.Prefix, p.timestamp.Format(lg.TimeFormat), c, l, reset, p.e.Error())
+				fmt.Fprintf(lg.ConsoleOut, "[%s] %s: %s [%s] %s %s\n", lg.Prefix, p.timestamp.Format(lg.TimeFormat), c, l, reset, p.e.Error())
 			}
 			if lg.FileOut != nil {
-				fmt.Fprintf(lg.ConsoleOut, "[%s] %s: [%s] %s", lg.Prefix, p.timestamp.Format(lg.TimeFormat), l, p.e.Error())
+				fmt.Fprintf(lg.FileOut, "[%s] %s: [%s] %s\n", lg.Prefix, p.timestamp.Format(lg.TimeFormat), l, p.e.Error())
 			}
 		}
 	}
