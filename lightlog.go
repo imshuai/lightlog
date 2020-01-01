@@ -101,7 +101,8 @@ func level(t LogLevel) string {
 
 //LogWriter 日志顺序输出
 func LogWriter(lg *Logger) {
-	for p := <-lg.queuen; p != nil; {
+	for {
+		p := <-lg.queuen
 		if p.Level >= lg.Level {
 			c := color(p.Level)
 			l := level(p.Level)
